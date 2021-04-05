@@ -1,0 +1,12 @@
+{
+	"name": "SqlServerSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServerADV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
