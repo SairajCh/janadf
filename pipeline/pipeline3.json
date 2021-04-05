@@ -24,7 +24,8 @@
 					"dataset": {
 						"referenceName": "SqlServerSource",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
