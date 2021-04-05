@@ -1,0 +1,17 @@
+{
+	"name": "SqlServer1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=LAPTOP-FDB4BSLC\\SAIRAJ;initial catalog=AdventureWorksDW2012",
+			"userName": "LAPTOP-FDB4BSLC\\saira",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4ODZhZmI4YS05Njg1LTRmMDUtOGFhOC1lODZhYzJmMmRlODQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "DemoOnPremIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
