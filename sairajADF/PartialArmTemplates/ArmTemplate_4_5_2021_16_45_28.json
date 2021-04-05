@@ -39,8 +39,7 @@
 							},
 							"dataset": {
 								"referenceName": "SqlServerSource",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						}
 					},
@@ -101,8 +100,7 @@
 									"inputs": [
 										{
 											"referenceName": "SqlServerSource",
-											"type": "DatasetReference",
-											"parameters": {}
+											"type": "DatasetReference"
 										}
 									],
 									"outputs": [
