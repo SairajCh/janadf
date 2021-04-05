@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageLS'"
 		},
+		"AzureSqlDBLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDBLS'"
+		},
 		"AzureSqlDatabaseLS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLS'"
@@ -69,6 +73,9 @@
 					"AzureBlobStorageLS_connectionString": {
 						"value": "[parameters('AzureBlobStorageLS_connectionString')]"
 					},
+					"AzureSqlDBLS_connectionString": {
+						"value": "[parameters('AzureSqlDBLS_connectionString')]"
+					},
 					"AzureSqlDatabaseLS_connectionString": {
 						"value": "[parameters('AzureSqlDatabaseLS_connectionString')]"
 					},
@@ -93,6 +100,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "sairajADF_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'sairajADF_ArmTemplate_0')]"
+			]
 		}
 	]
 }
