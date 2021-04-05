@@ -39,8 +39,7 @@
 							},
 							"dataset": {
 								"referenceName": "SqlServerSource",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							},
 							"firstRowOnly": false
 						}
@@ -102,8 +101,7 @@
 									"inputs": [
 										{
 											"referenceName": "SqlServerSource",
-											"type": "DatasetReference",
-											"parameters": {}
+											"type": "DatasetReference"
 										}
 									],
 									"outputs": [

@@ -422,7 +422,8 @@
 								"referenceName": "SqlServerSource",
 								"type": "DatasetReference",
 								"parameters": {}
-							}
+							},
+							"firstRowOnly": false
 						}
 					},
 					{
