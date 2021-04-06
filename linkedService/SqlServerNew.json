@@ -1,0 +1,35 @@
+{
+	"name": "SqlServerNew",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"servername": {
+				"type": "string",
+				"defaultValue": "LAPTOP-FDB4BSLC\\SAIRAJ"
+			},
+			"databasename": {
+				"type": "string",
+				"defaultValue": "AdventureWorks2012"
+			},
+			"username": {
+				"type": "string",
+				"defaultValue": "LAPTOP-FDB4BSLC\\saira"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "236@Sairaj"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "Integrated Security=True;Data Source=@{linkedService().servername};Initial Catalog=@{linkedService().databasename}",
+			"userName": "@{linkedService().username}",
+			"password": "@{linkedService().password}"
+		},
+		"connectVia": {
+			"referenceName": "Demo1OnPremIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
