@@ -2,7 +2,7 @@
 	"name": "AzureSqlTable1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureSqlDBLS",
+			"referenceName": "AzureSqlTrialDBLS",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -14,7 +14,7 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo1",
+			"schema": "dboCopy",
 			"table": {
 				"value": "@dataset().tablename",
 				"type": "Expression"

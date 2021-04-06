@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "LookupDepartments",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -33,7 +33,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "LookupDepartments",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('LookupDepartments').output",
 						"type": "Expression"
 					},
 					"activities": [
@@ -69,8 +69,15 @@
 									"partitionOption": "None"
 								},
 								"sink": {
-									"type": "AzureSqlSink",
-									"tableOption": "autoCreate"
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
 								},
 								"enableStaging": false,
 								"translator": {
@@ -90,7 +97,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "AzureSqlTable1",
+									"referenceName": "DelimitedADLSSINK",
 									"type": "DatasetReference",
 									"parameters": {
 										"tablename": {

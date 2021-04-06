@@ -2,8 +2,14 @@
 	"name": "SqlServerSource",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "SqlServerADV",
-			"type": "LinkedServiceReference"
+			"referenceName": "SqlServerNew",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"servername": "LAPTOP-FDB4BSLC\\SAIRAJ",
+				"databasename": "AdventureWorks2012",
+				"username": "LAPTOP-FDB4BSLC\\saira",
+				"password": "236@Sairaj"
+			}
 		},
 		"annotations": [],
 		"type": "SqlServerTable",
