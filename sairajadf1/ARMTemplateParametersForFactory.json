@@ -8,6 +8,9 @@
 		"AzureBlobStorageLS_connectionString": {
 			"value": ""
 		},
+		"AzureDataLakeStorageGen2LS_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDBLS_connectionString": {
 			"value": ""
 		},
@@ -32,11 +35,20 @@
 		"SqlServerADV_password": {
 			"value": ""
 		},
+		"SqlServerNew_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageGen2LS_properties_typeProperties_url": {
+			"value": "https://sairajdlsgen2.dfs.core.windows.net"
+		},
 		"SqlServer1_properties_typeProperties_userName": {
 			"value": "LAPTOP-FDB4BSLC\\saira"
 		},
 		"SqlServerADV_properties_typeProperties_userName": {
 			"value": "LAPTOP-FDB4BSLC\\saira"
+		},
+		"SqlServerNew_properties_typeProperties_userName": {
+			"value": "@{linkedService().username}"
 		}
 	}
 }

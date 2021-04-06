@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageLS'"
 		},
+		"AzureDataLakeStorageGen2LS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageGen2LS'"
+		},
 		"AzureSqlDBLS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDBLS'"
@@ -43,6 +47,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'SqlServerADV'"
 		},
+		"SqlServerNew_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerNew'"
+		},
+		"AzureDataLakeStorageGen2LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sairajdlsgen2.dfs.core.windows.net"
+		},
 		"SqlServer1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "LAPTOP-FDB4BSLC\\saira"
@@ -50,6 +62,10 @@
 		"SqlServerADV_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "LAPTOP-FDB4BSLC\\saira"
+		},
+		"SqlServerNew_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().username}"
 		}
 	},
 	"variables": {
@@ -452,7 +468,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
+						"name": "LookupDepartments",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -483,7 +499,7 @@
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "LookupDepartments",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -492,7 +508,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup1').output.value",
+								"value": "@activity('LookupDepartments').output",
 								"type": "Expression"
 							},
 							"activities": [
@@ -519,8 +535,15 @@
 											"partitionOption": "None"
 										},
 										"sink": {
-											"type": "AzureSqlSink",
-											"tableOption": "autoCreate"
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
 										},
 										"enableStaging": false,
 										"translator": {
@@ -541,7 +564,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "AzureSqlTable1",
+											"referenceName": "DelimitedADLSSINK",
 											"type": "DatasetReference",
 											"parameters": {
 												"tablename": {
@@ -560,7 +583,51 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServerSource')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+				"[concat(variables('factoryId'), '/datasets/DelimitedADLSSINK')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/scdpipeline2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "scd2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesLTProduct": {},
+									"DimProductSource": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		},
 		{
@@ -889,7 +956,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureSqlDBLS",
+					"referenceName": "AzureSqlTrialDBLS",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
@@ -901,7 +968,7 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "dbo1",
+					"schema": "dboCopy",
 					"table": {
 						"value": "@dataset().tablename",
 						"type": "Expression"
@@ -909,7 +976,42 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDBLS')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlTrialDBLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedADLSSINK')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2LS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().tablename",
+							"type": "Expression"
+						},
+						"fileSystem": "adf"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2LS')]"
 			]
 		},
 		{
@@ -1043,8 +1145,14 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "SqlServerADV",
-					"type": "LinkedServiceReference"
+					"referenceName": "SqlServerNew",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": "LAPTOP-FDB4BSLC\\SAIRAJ",
+						"databasename": "AdventureWorks2012",
+						"username": "LAPTOP-FDB4BSLC\\saira",
+						"password": "236@Sairaj"
+					}
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
@@ -1052,7 +1160,7 @@
 				"typeProperties": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SqlServerADV')]"
+				"[concat(variables('factoryId'), '/linkedServices/SqlServerNew')]"
 			]
 		},
 		{
@@ -1298,6 +1406,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorageGen2LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorageGen2LS_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorageGen2LS_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDBLS')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1363,15 +1488,9 @@
 						"type": "SecureString",
 						"value": "[parameters('SqlServer1_password')]"
 					}
-				},
-				"connectVia": {
-					"referenceName": "DemoOnPremIR",
-					"type": "IntegrationRuntimeReference"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/DemoOnPremIR')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlServerADV')]",
@@ -1387,18 +1506,51 @@
 						"type": "SecureString",
 						"value": "[parameters('SqlServerADV_password')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerNew')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"servername": {
+						"type": "string",
+						"defaultValue": "LAPTOP-FDB4BSLC\\SAIRAJ"
+					},
+					"databasename": {
+						"type": "string",
+						"defaultValue": "AdventureWorks2012"
+					},
+					"username": {
+						"type": "string",
+						"defaultValue": "LAPTOP-FDB4BSLC\\saira"
+					},
+					"password": {
+						"type": "string",
+						"defaultValue": "236@Sairaj"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerNew_connectionString')]",
+					"userName": "[parameters('SqlServerNew_properties_typeProperties_userName')]",
+					"password": "@{linkedService().password}"
 				},
 				"connectVia": {
-					"referenceName": "DemoOnPremIR",
+					"referenceName": "Demo1OnPremIR",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/DemoOnPremIR')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/Demo1OnPremIR')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DemoOnPremIR')]",
+			"name": "[concat(parameters('factoryName'), '/Demo1OnPremIR')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1519,50 +1671,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlSamplePRDatasetSource')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlDimProSourceDataset')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/scdpipeline2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "scd2",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SalesLTProduct": {},
-									"DimProductSource": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		}
 	]

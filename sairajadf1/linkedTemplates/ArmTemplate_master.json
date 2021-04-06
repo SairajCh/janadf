@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageLS'"
 		},
+		"AzureDataLakeStorageGen2LS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageGen2LS'"
+		},
 		"AzureSqlDBLS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDBLS'"
@@ -43,6 +47,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'SqlServerADV'"
 		},
+		"SqlServerNew_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerNew'"
+		},
+		"AzureDataLakeStorageGen2LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sairajdlsgen2.dfs.core.windows.net"
+		},
 		"SqlServer1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "LAPTOP-FDB4BSLC\\saira"
@@ -50,6 +62,10 @@
 		"SqlServerADV_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "LAPTOP-FDB4BSLC\\saira"
+		},
+		"SqlServerNew_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().username}"
 		},
 		"containerUri": {
 			"type": "string",
@@ -81,6 +97,9 @@
 					"AzureBlobStorageLS_connectionString": {
 						"value": "[parameters('AzureBlobStorageLS_connectionString')]"
 					},
+					"AzureDataLakeStorageGen2LS_accountKey": {
+						"value": "[parameters('AzureDataLakeStorageGen2LS_accountKey')]"
+					},
 					"AzureSqlDBLS_connectionString": {
 						"value": "[parameters('AzureSqlDBLS_connectionString')]"
 					},
@@ -105,6 +124,9 @@
 					"SqlServerADV_password": {
 						"value": "[parameters('SqlServerADV_password')]"
 					},
+					"AzureDataLakeStorageGen2LS_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorageGen2LS_properties_typeProperties_url')]"
+					},
 					"SqlServer1_properties_typeProperties_userName": {
 						"value": "[parameters('SqlServer1_properties_typeProperties_userName')]"
 					},
@@ -128,6 +150,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"SqlServerNew_connectionString": {
+						"value": "[parameters('SqlServerNew_connectionString')]"
+					},
+					"SqlServerNew_properties_typeProperties_userName": {
+						"value": "[parameters('SqlServerNew_properties_typeProperties_userName')]"
 					}
 				}
 			},
