@@ -1,5 +1,5 @@
 {
-	"name": "dataflow2",
+	"name": "agggregatedataflow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

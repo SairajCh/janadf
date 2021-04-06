@@ -1,5 +1,5 @@
 {
-	"name": "pipeline3",
+	"name": "copyfilescondition",
 	"properties": {
 		"activities": [
 			{
@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('LookupDepartments').output",
+						"value": "@activity('LookupDepartments').output.value",
 						"type": "Expression"
 					},
 					"activities": [
