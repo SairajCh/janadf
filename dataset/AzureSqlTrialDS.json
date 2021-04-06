@@ -1,0 +1,24 @@
+{
+	"name": "AzureSqlTrialDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlTrialDBLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().TName",
+				"type": "Expression"
+			}
+		}
+	}
+}
