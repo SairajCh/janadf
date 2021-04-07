@@ -1,0 +1,21 @@
+{
+	"name": "BlobSink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageLS1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "adf"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
