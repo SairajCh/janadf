@@ -9,13 +9,20 @@
 			"tname": {
 				"type": "string",
 				"defaultValue": "others"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "dbo1"
 			}
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "newdbo",
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
 			"table": {
 				"value": "@dataset().tname",
 				"type": "Expression"
