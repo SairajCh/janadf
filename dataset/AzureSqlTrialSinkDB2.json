@@ -1,0 +1,25 @@
+{
+	"name": "AzureSqlTrialSinkDB2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlTrialDBLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tname": {
+				"type": "string",
+				"defaultValue": "others"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "newdbo",
+			"table": {
+				"value": "@dataset().tname",
+				"type": "Expression"
+			}
+		}
+	}
+}
