@@ -9,20 +9,12 @@
 			"tname": {
 				"type": "string",
 				"defaultValue": "productid700and 800"
-			},
-			"schema": {
-				"type": "string",
-				"defaultValue": "dbo1"
 			}
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": {
-				"value": "@dataset().schema",
-				"type": "Expression"
-			},
 			"table": {
 				"value": "@dataset().tname",
 				"type": "Expression"
